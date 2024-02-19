@@ -1,0 +1,458 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
+package javaapplication7;
+
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
+public class FrontP {
+    public static void main(String[] args) {
+        // main frame
+        JFrame frame = new JFrame("Buttons");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JPanel panel = new BackgroundPanel(); // Use custom panel for background
+        panel.setLayout(new BorderLayout());
+
+        // menuButtons panel
+        JPanel menuButtons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        menuButtons.setBackground(new Color(0, 0, 0, 0));
+        menuButtons.setBorder(new EmptyBorder(10, 10, 10, 10)); // Add padding here
+
+        // buttons
+        JButton flwrs = new JButton("FLOWERS");
+        JButton msgUpdts = new JButton("MESSAGES / UPDATES");
+        JButton abt = new JButton("ABOUT US");
+
+        // styles buttons
+        flwrs.setBackground(Color.BLACK);
+        flwrs.setForeground(Color.WHITE);
+        flwrs.setBorder(null);
+        flwrs.setPreferredSize(new Dimension(150, 40));
+
+        msgUpdts.setBackground(Color.BLACK);
+        msgUpdts.setForeground(Color.WHITE);
+        msgUpdts.setBorder(null);
+        msgUpdts.setPreferredSize(new Dimension(150, 40));
+
+        abt.setBackground(Color.BLACK);
+        abt.setForeground(Color.WHITE);
+        abt.setBorder(null);
+        abt.setPreferredSize(new Dimension(150, 40));
+
+        menuButtons.add(flwrs);
+        menuButtons.add(msgUpdts);
+        menuButtons.add(abt);
+        
+        // button click to action
+        flwrs.addActionListener(new FlowersActionListener(frame));
+        msgUpdts.addActionListener(new msgUpdtsActionListener(frame));
+        abt.addActionListener(new AboutUsActionListener(frame));
+
+        // Add menuButtons to panel at top right
+        panel.add(menuButtons, BorderLayout.NORTH);
+
+        JPanel textPanel = new JPanel(new GridBagLayout());
+        textPanel.setBackground(new Color(0, 0, 0, 0));
+
+        JLabel headerTextLabel = new JLabel(""
+                + "<html><div style='text-align: center;'>"
+                + "<span style='color: white; font-size: 95px; font-weight: thin; line-height: 40px;'>Hidden<br>Love</span><br>"
+                + "<span style='color: black; font-size:35px;'>FLOWERSHOP</span>"
+                + "</div></html>",
+                SwingConstants.CENTER);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        textPanel.add(headerTextLabel, gbc);
+
+        //panel for the START button
+        JPanel startPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        startPanel.setOpaque(false); // Make it transparent
+        JButton start = new JButton("START");
+        startPanel.add(start);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        textPanel.add(startPanel, gbc);
+        
+        start.setBackground(Color.BLACK);
+        start.setForeground(Color.WHITE);
+        start.setBorder(null);
+        start.setPreferredSize(new Dimension(150, 40));
+        start.addActionListener(new msgUpdtsActionListener(frame));
+
+        // Add textPanel to panel
+        panel.add(textPanel, BorderLayout.CENTER);
+
+        // main container
+        frame.setContentPane(panel);
+
+        // set size to match screen dimensions
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        int screenWidth = gd.getDisplayMode().getWidth();
+        int screenHeight = gd.getDisplayMode().getHeight();
+        frame.setSize(screenWidth, screenHeight);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        // Set frame visible
+        frame.setVisible(true);
+    }
+
+    // Custom JPanel for background image
+    private static class BackgroundPanel extends JPanel {
+        private Image backgroundImage;
+
+        public BackgroundPanel() {
+            // Load the background image
+            backgroundImage = new ImageIcon("images/homebg.png").getImage();
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            // Draw the background image
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+}
+
+// flower gallery window
+class FlowersActionListener implements ActionListener {
+    private JFrame mainFrame;
+
+    FlowersActionListener(JFrame mainFrame) {
+        this.mainFrame = mainFrame;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JFrame flowersWindow = new JFrame("Flowers");
+        flowersWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        flowersWindow.setSize(mainFrame.getSize());
+        flowersWindow.setLocation(mainFrame.getLocation());
+        flowersWindow.setBackground(new Color(32, 32, 32));
+        JPanel mainPanel = new JPanel(new BorderLayout()); // Main panel to hold components
+
+        // Create and add label at the top
+        JLabel titleLabel = new JLabel("Flowers", SwingConstants.CENTER);
+        titleLabel.setBorder(new EmptyBorder(10, 10, 10, 10)); //padding
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 45));
+        titleLabel.setForeground(Color.WHITE);
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+
+        JPanel imagePanel = new JPanel(new GridLayout(0, 4, 10, 10));
+        imagePanel.setBorder(new EmptyBorder(10, 15, 10, 15)); //padding
+        imagePanel.setBackground(new Color(0, 0, 0, 0));
+
+        try {
+            // Load and add images
+            BufferedImage flwrs1 = ImageIO.read(new File("images/flwrs01.png"));
+            BufferedImage flwrs2 = ImageIO.read(new File("images/flwrs02.png"));
+            BufferedImage flwrs3 = ImageIO.read(new File("images/flwrs03.png"));
+            BufferedImage flwrs4 = ImageIO.read(new File("images/flwrs04.png"));
+            BufferedImage flwrs5 = ImageIO.read(new File("images/flwrs05.png"));
+            BufferedImage flwrs6 = ImageIO.read(new File("images/flwrs06.png"));
+            BufferedImage flwrs7 = ImageIO.read(new File("images/flwrs07.png"));
+            BufferedImage flwrs8 = ImageIO.read(new File("images/flwrs08.png"));
+
+            addImageWithLabel(imagePanel, flwrs1, "Flower 01");
+            addImageWithLabel(imagePanel, flwrs2, "Flower 02");
+            addImageWithLabel(imagePanel, flwrs3, "Flower 03");
+            addImageWithLabel(imagePanel, flwrs4, "Flower 04");
+            addImageWithLabel(imagePanel, flwrs5, "Flower 05");
+            addImageWithLabel(imagePanel, flwrs6, "Flower 06");
+            addImageWithLabel(imagePanel, flwrs7, "Flower 07");
+            addImageWithLabel(imagePanel, flwrs8, "Flower 08");
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        mainPanel.add(imagePanel, BorderLayout.CENTER);
+        mainPanel.setBackground(new Color(0, 0, 0, 0));
+        flowersWindow.setContentPane(mainPanel);
+        flowersWindow.setVisible(true);
+    }
+
+    // Method to add an image with a label to the imagePanel
+    private void addImageWithLabel(JPanel parentPanel, BufferedImage image, String labelText) {
+        JPanel imageContainer = new JPanel(new BorderLayout());
+        imageContainer.setBackground(new Color(0, 0, 0, 0));
+        JLabel imageLabel = new JLabel(new ImageIcon(image));
+        JLabel label = new JLabel(labelText, SwingConstants.CENTER);
+        label.setForeground(Color.WHITE);
+        label.setFont(new Font("Arial", Font.PLAIN, 40));
+        imageContainer.add(imageLabel, BorderLayout.CENTER);
+        imageContainer.add(label, BorderLayout.SOUTH);
+        parentPanel.add(imageContainer);
+    }
+}
+
+// Messages & Updated window
+class msgUpdtsActionListener implements ActionListener {
+    private JFrame mainFrame;
+
+    msgUpdtsActionListener(JFrame mainFrame) {
+        this.mainFrame = mainFrame;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JFrame msgUpdtsWindow = new JFrame("Messages / Updates");
+        msgUpdtsWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        msgUpdtsWindow.setSize(mainFrame.getSize());
+        msgUpdtsWindow.setLocation(mainFrame.getLocation());
+        JPanel mainPanel = new JPanel(new BorderLayout());
+
+        JLabel titleLabel = new JLabel("Messages / Updates", SwingConstants.CENTER);
+        titleLabel.setBorder(new EmptyBorder(10, 10, 10, 10)); //padding
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 45));
+        titleLabel.setForeground(Color.WHITE);
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+
+        mainPanel.setBackground(new Color(32, 32, 32));
+
+        //form panel on the left side
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setBorder(new EmptyBorder(10, 20, 10, 20)); //padding
+        formPanel.setBackground(new Color(0, 0, 0, 0));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0, 0, 5, 0);
+
+        // Name
+        JLabel nameLabel = new JLabel("Name");
+        nameLabel.setForeground(Color.WHITE);
+        formPanel.add(nameLabel, gbc);
+        gbc.gridy++;
+        JTextField nameField = new JTextField();
+        nameField.setColumns(70);
+        nameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+        formPanel.add(nameField, gbc);
+        
+        gbc.gridy++; //break
+
+        // Address
+        gbc.gridy++;
+        JLabel addressLabel = new JLabel("Address");
+        addressLabel.setForeground(Color.WHITE);
+        formPanel.add(addressLabel, gbc);
+        gbc.gridy++;
+        JTextField addressField = new JTextField();
+        addressField.setColumns(70);
+        addressField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        formPanel.add(addressField, gbc);
+        
+        gbc.gridy++; //break
+
+        // Contact Number
+        gbc.gridy++;
+        JLabel contactLabel = new JLabel("Contact Number");
+        contactLabel.setForeground(Color.WHITE);
+        formPanel.add(contactLabel, gbc);
+        gbc.gridy++;
+        JTextField contactField = new JTextField();
+        contactField.setColumns(70);
+        contactField.setPreferredSize(new Dimension(100, 25));
+        formPanel.add(contactField, gbc);
+        
+        gbc.gridy++; //break
+
+        // Flower code
+        gbc.gridy++;
+        JLabel selectLabel = new JLabel("Chosen Flower (in a code):");
+        selectLabel.setForeground(Color.WHITE);
+        formPanel.add(selectLabel, gbc);
+        gbc.gridy++;
+        JComboBox<String> optionsComboBox = new JComboBox<>(new String[]{
+                "flwrs01",
+                "flwrs02",
+                "flwrs03",
+                "flwrs04",
+                "flwrs05",
+                "flwrs06",
+                "flwrs07",
+                "flwrs08"
+        });
+        // Set the preferred width based on the longest item
+        int maxWidth = 0;
+        for (String item : new String[]{"flwrs01", "flwrs02", "flwrs03", "flwrs04", "flwrs05", "flwrs06", "flwrs07", "flwrs08"}) {
+            maxWidth = Math.max(maxWidth, item.length());
+        }
+        optionsComboBox.setPreferredSize(new Dimension(maxWidth * 10, 25)); // Adjust the multiplier as needed for appropriate width
+        formPanel.add(optionsComboBox, gbc);
+        
+        gbc.gridy++; //break
+
+        // payment
+        gbc.gridy++;
+        JLabel paymentLabel = new JLabel("Modes of payment(GCASH, MAYA)");
+        paymentLabel.setForeground(Color.WHITE);
+        formPanel.add(paymentLabel, gbc);
+        gbc.gridy++;
+        JTextField paymentField = new JTextField();
+        paymentField.setColumns(70);
+        paymentField.setPreferredSize(new Dimension(100, 25));
+        formPanel.add(paymentField, gbc);
+        
+        gbc.gridy++; //break
+
+        // Message
+        gbc.gridy++;
+        JLabel messageLabel = new JLabel("Message:");
+        messageLabel.setForeground(Color.WHITE);
+        formPanel.add(messageLabel, gbc);
+        gbc.gridy++;
+        JTextArea messageArea = new JTextArea();
+        messageArea.setColumns(70);
+        messageArea.setLineWrap(true);
+        messageArea.setPreferredSize(new Dimension(100, 50));
+        formPanel.add(messageArea, gbc);
+        
+        gbc.gridy++; //break
+
+        // Confirm button
+        gbc.gridy++;
+        JButton confirmButton = new JButton("Confirm");
+        confirmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Add your confirmation action here
+                JFrame successFrame = new JFrame("Messages Sent!");
+                successFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                successFrame.setSize(500, 250);
+                successFrame.setLocationRelativeTo(null); // Center the frame on the screen
+
+                JPanel successPanel = new JPanel(new BorderLayout());
+
+                // Create a JLabel with the background image
+                ImageIcon backgroundImage = new ImageIcon("images/aboutbg.png");
+                JLabel backgroundLabel = new JLabel(backgroundImage);
+                backgroundLabel.setLayout(new BorderLayout());
+
+                JLabel successLabel = new JLabel("Messages Sent!");
+                successLabel.setForeground(Color.WHITE); // Set text color to white
+                successLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                successLabel.setFont(new Font("Arial", Font.BOLD, 45)); // Set font to Arial, bold, size 65
+
+                // Add the success label to the center of the background label
+                backgroundLabel.add(successLabel, BorderLayout.CENTER);
+
+                // Add the background label to the success panel
+                successPanel.add(backgroundLabel, BorderLayout.CENTER);
+
+                successFrame.add(successPanel);
+                successFrame.setVisible(true);
+            }
+        });
+                confirmButton.setBackground(Color.BLACK);
+        confirmButton.setForeground(Color.WHITE);
+        confirmButton.setBorder(null);
+        confirmButton.setPreferredSize(new Dimension(150, 40));
+        formPanel.add(confirmButton, gbc);
+
+        // Add form panel to a panel that occupies 50% of the window's width
+        JPanel leftPanel = new JPanel(new BorderLayout());
+        leftPanel.setPreferredSize(new Dimension(msgUpdtsWindow.getSize().width / 2, msgUpdtsWindow.getSize().height));
+        leftPanel.add(formPanel, BorderLayout.CENTER);
+        leftPanel.setBackground(new Color(0, 0, 0, 0));
+
+        // Load first initial image on the right side
+        ImageIcon initialImageIcon = new ImageIcon("images/flwrs01.png");
+        JLabel imageLabel = new JLabel(initialImageIcon);
+        JPanel rightPanel = new JPanel(new BorderLayout());
+        rightPanel.add(imageLabel, BorderLayout.CENTER);
+        rightPanel.setBackground(new Color(0, 0, 0, 0));
+        rightPanel.setPreferredSize(new Dimension(msgUpdtsWindow.getSize().width / 2, msgUpdtsWindow.getSize().height));
+
+        // Add left and right panels to the main panel
+        mainPanel.add(leftPanel, BorderLayout.WEST);
+        mainPanel.add(rightPanel, BorderLayout.EAST);
+
+        // Add action listener to the combo box
+        optionsComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedOption = (String) optionsComboBox.getSelectedItem();
+                ImageIcon imageIcon = new ImageIcon("images/" + selectedOption + ".png");
+                imageLabel.setIcon(imageIcon);
+            }
+        });
+
+        msgUpdtsWindow.setContentPane(mainPanel);
+        msgUpdtsWindow.setVisible(true);
+    }
+}
+
+// About Us WIndow
+class AboutUsActionListener implements ActionListener {
+    private JFrame mainFrame;
+
+    AboutUsActionListener(JFrame mainFrame) {
+        this.mainFrame = mainFrame;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JFrame aboutWindow = new JFrame("About Us");
+        aboutWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        aboutWindow.setSize(mainFrame.getSize());
+        aboutWindow.setLocation(mainFrame.getLocation());
+        aboutWindow.setBackground(new Color(32, 32, 32));
+
+        JPanel mainPanel = new BackgroundPanel();
+        mainPanel.setLayout(new BorderLayout());
+
+        // Create and add label at the top
+        JLabel description = new JLabel("" +
+                "<html><div style='text-align: center;'>" +
+                "<h1 style='font-size: 45px; color: white;'>ABOUT US</h1><br>" +
+                "<img src='images/heart.png' width='70' height='70' style='margin-bottom: 45px;'><br>" +
+                "<p style='font-size: 18px;'>Welcome to Hidden Love Flower Shop, where floral dreams blossom into reality! Nestled in the heart of [Your City], we are passionate cultivators of nature's beauty, offering a captivating array of exquisite flowers and botanical delights.</p><br>" +
+                "<p style='font-size: 18px;'>At Hidden Love Flower Shop, our story is rooted in a deep love for the enchanting world of flowers. What started as a humble seed of inspiration has grown into a flourishing haven for flower enthusiasts and those seeking the perfect bloom to express their emotions.</p><br>" +
+                "<p style='font-size: 18px;'>Our journey began [X years] ago, driven by the belief that every petal tells a story. With a commitment to quality, creativity, and personalized service, we have become a cherished destination for individuals looking to celebrate life's special moments or simply brighten someone's day.</p><br>" +
+                "<p style='font-size: 18px;'>What sets us apart is not just our stunning selection of blooms but also the meticulous care that goes into curating each arrangement. From vibrant bouquets to elegant centerpieces, our talented team of floral artisans at Hidden Love Flower Shop crafts each creation with a touch of artistry and a dash of love.</p><br>" +
+                "<p style='font-size: 18px;'>We take pride in sourcing the freshest flowers from local growers, ensuring that each blossom is at its peak of beauty and fragrance when it reaches your hands. Our dedication to sustainability extends to our packaging, which is eco-friendly and designed to minimize our environmental footprint.</p><br>" +
+                "<p style='font-size: 18px;'>Beyond the petals, Hidden Love Flower Shop is a place of inspiration and celebration. We believe in the power of flowers to connect people, express emotions, and add a touch of natural elegance to every occasion. Whether you're planning a wedding, sending heartfelt condolences, or simply treating yourself to a beautiful bouquet, we are here to make your floral visions come to life.</p><br>" +
+                "<p style='font-size: 18px;'>Thank you for choosing Hidden Love Flower Shop as your floral destination. Join us in celebrating the poetry of flowers and let their beauty unfold in every petal. Welcome to a world where fragrance and color dance in harmony – welcome to Hidden Love Flower Shop.</p>" +
+                "</div></html>",
+                SwingConstants.CENTER);
+        description.setBorder(new EmptyBorder(45, 35, 10, 45));
+
+        mainPanel.add(description, BorderLayout.CENTER);
+        aboutWindow.setContentPane(mainPanel);
+        aboutWindow.setVisible(true);
+    }
+
+    //background image
+    private static class BackgroundPanel extends JPanel {
+        private Image backgroundImage;
+
+        public BackgroundPanel() {
+            backgroundImage = new ImageIcon("images/aboutbg.png").getImage();
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+}
+
